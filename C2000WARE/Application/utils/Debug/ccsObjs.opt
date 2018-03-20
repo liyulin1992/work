@@ -1,0 +1,1 @@
+"./uartstdio.obj" "./driverlib/uart.obj" "./driverlib/usb.obj" -llibc.a 

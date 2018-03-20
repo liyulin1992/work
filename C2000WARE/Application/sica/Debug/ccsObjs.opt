@@ -1,0 +1,1 @@
+"./mainc.obj" "../2837xD_RAM_lnk_cpu1.cmd" -llibc.a -l"../../../Library/lib_cpu1.lib" 

@@ -1,0 +1,1 @@
+"./emif_asram_pin_setup.obj" "./main.obj" "../2837xD_RAM_lnk_emif_cpu1.cmd" -llibc.a -l"../../../Library/lib_cpu1.lib" 
