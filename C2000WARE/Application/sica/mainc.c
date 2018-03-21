@@ -12,6 +12,9 @@
 uint16_t loopCount;
 uint16_t errorCount;
 
+uint16_t sendChar=0xab;
+uint16_t receivedChar;
+
 //函数声明
 void initSCIALoopback(void);
 void initSCIAFIFO(void);
@@ -21,9 +24,6 @@ void error();
 // Main
 void main(void)
 {
-    uint16_t sendChar;
-    uint16_t receivedChar;
-
     //系统初始化
     Device_init();
 
@@ -58,12 +58,10 @@ void main(void)
     initSCIAFIFO();
     initSCIALoopback();
 
-    sendChar = 0;
-
     //回环
     for(;;)
     {
-        xmitSCIA(sendChar);
+        xmitSCIA((uint16_t)sendChar);
 
         //等待状态寄存器
         while(SCI_getRxFIFOStatus(SCIA_BASE) == SCI_FIFO_RX0)
@@ -74,16 +72,6 @@ void main(void)
         //接受数据
         receivedChar = SCI_readCharBlockingFIFO(SCIA_BASE);
 
-        //校验
-        if(receivedChar != sendChar)
-        {
-            error();
-        }
-
-        sendChar++;
-
-        //
-        sendChar &= 0x00FF;
         loopCount++;
     }
 }
@@ -102,7 +90,7 @@ void initSCIALoopback()
 {
 
     // 8 char bits, 1 stop bit, no parity. Baud rate is 9600.
-    SCI_setConfig(SCIA_BASE, DEVICE_LSPCLK_FREQ, 9600, (SCI_CONFIG_WLEN_8 |
+    SCI_setConfig(SCIA_BASE, DEVICE_LSPCLK_FREQ, 115200, (SCI_CONFIG_WLEN_8 |
                                                         SCI_CONFIG_STOP_ONE |
                                                         SCI_CONFIG_PAR_NONE));
     SCI_disableLoopback(SCIA_BASE);
@@ -111,10 +99,10 @@ void initSCIALoopback()
     SCI_performSoftwareReset(SCIA_BASE);
     SCI_disableInterrupt(SCIA_BASE, SCI_INT_RXERR);
 
-    SCI_enableInterrupt(SCIA_BASE, SCI_INT_TXRDY);
-    SCI_enableInterrupt(SCIA_BASE, SCI_INT_RXRDY_BRKDT);
+//    SCI_enableInterrupt(SCIA_BASE, SCI_INT_TXRDY);
+//    SCI_enableInterrupt(SCIA_BASE, SCI_INT_RXRDY_BRKDT);
 
-    SCI_enableLoopback(SCIA_BASE);
+//    SCI_enableLoopback(SCIA_BASE);
 
     //使能
     SCI_enableModule(SCIA_BASE);
@@ -123,7 +111,7 @@ void initSCIALoopback()
 //
 void xmitSCIA(uint16_t a)
 {
-    SCI_writeCharNonBlocking(SCIA_BASE, a);
+    SCI_writeCharBlockingFIFO(SCIA_BASE, a);
 }
 
 //FIFO初始化
