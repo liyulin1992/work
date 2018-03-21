@@ -128,10 +128,10 @@ void setupEMIF1PinmuxAsync16Bit(void)
     //
     // Setting DQM and Bank Select lines.
     //
-    GPIO_setPinConfig(GPIO_88_EM1DQM0);
-    GPIO_setPinConfig(GPIO_89_EM1DQM1);
-    GPIO_setPinConfig(GPIO_90_EM1DQM2);
-    GPIO_setPinConfig(GPIO_91_EM1DQM3);
+    GPIO_setPinConfig(GPIO_88_EM1A15);
+    GPIO_setPinConfig(GPIO_89_EM1A16);
+    GPIO_setPinConfig(GPIO_90_EM1A17);
+    GPIO_setPinConfig(GPIO_91_EM1A18);
     GPIO_setPinConfig(GPIO_92_EM1BA1);
     GPIO_setPinConfig(GPIO_93_EM1BA0);
     GPIO_setPinConfig(GPIO_94_EM1A21);
@@ -147,6 +147,7 @@ void setupEMIF1PinmuxAsync16Bit(void)
             GPIO_setQualificationMode(i, GPIO_QUAL_ASYNC);
         }
     }
+
  }
 
 //

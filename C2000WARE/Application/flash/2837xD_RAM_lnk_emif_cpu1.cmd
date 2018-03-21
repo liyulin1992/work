@@ -13,7 +13,7 @@ PAGE 0 :
    RAMLS3      		: origin = 0x009800, length = 0x000800
    RAMLS4      		: origin = 0x00A000, length = 0x000800
    RESET           	: origin = 0x3FFFC0, length = 0x000002
-   EMIF1_CS2n       : origin = 0x00100000, length = 0x00200000
+   EMIF1_CS2n       : origin = 0x100000, length = 0x20000
 
 PAGE 1 :
 
