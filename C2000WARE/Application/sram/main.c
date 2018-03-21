@@ -1,5 +1,6 @@
 #include "device.h"
 #include "driverlib.h"
+#include <stdio.h>
 
 //CS片选地址
 #define ASRAM_CS3_START_ADDR 0x300000           // EMIF1 CS3 地址
@@ -14,7 +15,7 @@ uint32_t w_data_b[ASRAM_CS3_SIZE];
 uint32_t r_data_b[ASRAM_CS3_SIZE];
 
 //
-//uint16_t Err_Check_RAM_Flag;
+uint16_t Err_Check;
 
 //函数声明
 void Emif_Init();
@@ -22,7 +23,6 @@ extern void setupEMIF1PinmuxAsync16Bit(void);
 
 uint16_t Read_RAM(uint32_t startAddr, uint32_t memSize,uint32_t *data_r);
 uint16_t Write_RAM(uint32_t startAddr, uint32_t memSize,uint32_t *data_w);
-//uint16_t Check_All_RAM();
 
 void main()
 {
@@ -45,6 +45,16 @@ void main()
 	}
 
 	Write_RAM(ASRAM_CS3_START_ADDR,ASRAM_CS3_SIZE,w_data_b);
+	Read_RAM(ASRAM_CS3_START_ADDR,ASRAM_CS3_SIZE,r_data_b);
+
+	//校验
+	for(j=0;j<ASRAM_CS3_SIZE;j++)
+	{
+	    if(w_data_b[j]!=r_data_b[j])
+	    {
+	        Err_Check++;
+	    }
+	}
 
 	while(1);
 }
@@ -68,32 +78,32 @@ void Emif_Init()
     setupEMIF1PinmuxAsync16Bit();
 
     //异步模式
-    EMIF_setAsyncMode(EMIF1_BASE, EMIF_ASYNC_CS2_OFFSET,
+    EMIF_setAsyncMode(EMIF1_BASE, EMIF_ASYNC_CS3_OFFSET,
                       EMIF_ASYNC_NORMAL_MODE);
 
-    EMIF_disableAsyncExtendedWait(EMIF1_BASE, EMIF_ASYNC_CS2_OFFSET);
+    EMIF_disableAsyncExtendedWait(EMIF1_BASE, EMIF_ASYNC_CS3_OFFSET);
 
     //数据宽度
-    EMIF_setAsyncDataBusWidth(EMIF1_BASE, EMIF_ASYNC_CS2_OFFSET,
+    EMIF_setAsyncDataBusWidth(EMIF1_BASE, EMIF_ASYNC_CS3_OFFSET,
                               EMIF_ASYNC_DATA_WIDTH_16);
 							   // Configure the access timing for CS2 space.
     //时序配置
-    tparam.rSetup = 0;
-    tparam.rStrobe = 3;
-    tparam.rHold = 0;
-    tparam.turnArnd = 0;
-    tparam.wSetup = 0;
-    tparam.wStrobe = 1;
-    tparam.wHold = 0;
-    EMIF_setAsyncTimingParams(EMIF1_BASE, EMIF_ASYNC_CS2_OFFSET, &tparam);
+    tparam.rSetup = 2;
+    tparam.rStrobe =8;
+    tparam.rHold = 2;
+    tparam.turnArnd = 1;
+    tparam.wSetup = 2;
+    tparam.wStrobe = 2;
+    tparam.wHold = 2;
+    EMIF_setAsyncTimingParams(EMIF1_BASE, EMIF_ASYNC_CS3_OFFSET, &tparam);
 }
 
 uint16_t Read_RAM(uint32_t startAddr, uint32_t memSize,uint32_t *data_r)
 {
-    uint32_t *memPtr;
+    uint16_t *memPtr;
     uint32_t i;
 	
-    memPtr = (uint32_t *)startAddr;
+    memPtr = (uint16_t *)startAddr;
 	
     for(i = 0; i < memSize; i++)
     {
@@ -105,14 +115,14 @@ uint16_t Read_RAM(uint32_t startAddr, uint32_t memSize,uint32_t *data_r)
 
 uint16_t Write_RAM(uint32_t startAddr, uint32_t memSize,uint32_t *data_w)
 {
-    uint32_t *memPtr;
+    uint16_t *memPtr;
     uint32_t i;	
 
-    memPtr = (uint32_t*)startAddr;
+    memPtr = (uint16_t*)startAddr;
 
     for(i=0; i < memSize ; i ++)
     {
-        *memPtr = *data_w++;
+        *memPtr++ = *data_w++;
     }
 
     return 1;
