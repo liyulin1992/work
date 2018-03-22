@@ -1,0 +1,56 @@
+#include "cla_sqrt_shared.h"
+#define LED1_TG GpioDataRegs.GPDTOGGLE.bit.GPIO111 = 1
+#include "F28x_Project.h"
+
+// Defines
+
+// Globals
+
+//CLAÈÎÎñ
+//float fVal ;
+//float fResult;
+//Task 1 :y = sqrt(x)
+__interrupt void Cla1Task1 ( void )
+{
+//    __mdebugstop();
+    fResult = __sqrt(2.0);
+//    while(1)
+//    {
+//        GpioDataRegs.GPDTOGGLE.bit.GPIO111 = 1;
+//    }
+}
+
+__interrupt void Cla1Task2 ( void )
+{
+
+}
+
+__interrupt void Cla1Task3 ( void )
+{
+
+}
+
+__interrupt void Cla1Task4 ( void )
+{
+
+}
+
+__interrupt void Cla1Task5 ( void )
+{
+
+}
+
+__interrupt void Cla1Task6 ( void )
+{
+
+}
+
+__interrupt void Cla1Task7 ( void )
+{
+
+}
+
+__interrupt void Cla1Task8 ( void )
+{
+
+}

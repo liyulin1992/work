@@ -8,13 +8,14 @@
 #include "driverlib.h"
 #include "device.h"
 
+//器件地址
 #define SLAVE_ADDRESS               0x50
 #define EEPROM_HIGH_ADDR            0x00
 #define EEPROM_LOW_ADDR             0x30
 #define NUM_BYTES                   8
 #define MAX_BUFFER_SIZE             14
 
-// I2C message states for I2CMsg struct
+//I2C消息传输状态
 #define MSG_STATUS_INACTIVE         0x0000 // Message not in use, do not send
 #define MSG_STATUS_SEND_WITHSTOP    0x0010 // Send message with stop bit
 #define MSG_STATUS_WRITE_BUSY       0x0011 // Message sent, wait for stop
@@ -23,7 +24,7 @@
 #define MSG_STATUS_RESTART          0x0022 // Ready to become master-receiver
 #define MSG_STATUS_READ_BUSY        0x0023 // Wait for stop before reading data
 
-// Error messages for read and write functions
+//错误信息
 #define ERROR_BUS_BUSY              0x1000
 #define ERROR_STOP_NOT_READY        0x5555
 #define SUCCESS                     0x0000
@@ -67,12 +68,16 @@ struct I2CMsg i2cMsgIn  = {MSG_STATUS_SEND_NOSTOP,
 // 中断用
 struct I2CMsg *currentMsgPtr;
 
-////////////////////////////////////////////
 // 函数声明
 void Init_I2C(void);
 void I2c_Pinmux(void);
+
 uint16_t ReadDate(struct I2CMsg *msg);
 uint16_t WriteData(struct I2CMsg *msg);
+
+uint16_t I2C_send(struct I2CMsg *msg);
+uint16_t I2C_receive(struct I2CMsg *msg);
+
 __interrupt void I2C_A_ISR(void);
 
 void main(void)
@@ -103,6 +108,9 @@ void main(void)
     Interrupt_enable(INT_I2CA);
     EINT;
     ERTM;
+
+    I2C_send(&i2cMsgOut);
+
 
     while(1)
     {
@@ -160,10 +168,10 @@ uint16_t WriteData(struct I2CMsg *msg)
     }
 
     // 设置发送字节数
-    I2C_setDataCount(I2CA_BASE, (msg->numBytes + 2));
+    I2C_setDataCount(I2CA_BASE, (msg->numBytes + 1));
 
     // 发送数据和地址
-    I2C_putData(I2CA_BASE, msg->memoryHighAddr);
+//    I2C_putData(I2CA_BASE, msg->memoryHighAddr);
     I2C_putData(I2CA_BASE, msg->memoryLowAddr);
 
     for (i = 0; i < msg->numBytes; i++)
@@ -198,12 +206,13 @@ uint16_t ReadDate(struct I2CMsg *msg)
             return(ERROR_BUS_BUSY);
         }
 
-        I2C_setDataCount(I2CA_BASE, 2);
-        I2C_putData(I2CA_BASE, msg->memoryHighAddr);
+        I2C_setDataCount(I2CA_BASE, 1);
+//        I2C_putData(I2CA_BASE, msg->memoryHighAddr);
         I2C_putData(I2CA_BASE, msg->memoryLowAddr);
         I2C_setConfig(I2CA_BASE, I2C_MASTER_SEND_MODE);
         I2C_sendStartCondition(I2CA_BASE);
     }
+
     else if(msg->msgStatus == MSG_STATUS_RESTART)
     {
         // 设置读取字节数以及重新启动接受

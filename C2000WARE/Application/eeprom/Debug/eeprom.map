@@ -1,10 +1,10 @@
 ******************************************************************************
              TMS320C2000 Linker PC v16.9.1                     
 ******************************************************************************
->> Linked Mon Mar 19 15:04:47 2018
+>> Linked Thu Mar 22 12:02:16 2018
 
 OUTPUT FILE NAME:   <eeprom.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 0000037e
+ENTRY POINT SYMBOL: "_c_int00"  address: 00000379
 
 
 MEMORY CONFIGURATION
@@ -13,7 +13,7 @@ MEMORY CONFIGURATION
 ----------------------  --------  ---------  --------  --------  ----  --------
 PAGE 0:
   BEGIN                 00000000   00000002  00000000  00000002  RWIX
-  RAMM0                 00000122   000002de  000002de  00000000  RWIX
+  RAMM0                 00000122   000002de  000002d9  00000005  RWIX
   RAMLS0                00008000   00000800  0000022b  000005d5  RWIX
   RAMLS1                00008800   00000800  00000000  00000800  RWIX
   RAMLS2                00009000   00000800  00000000  00000800  RWIX
@@ -62,12 +62,12 @@ section   page    origin      length       input sections
 
 .pinit     0    00000122    00000000     UNINITIALIZED
 
-.text.1    0    00000158    000002a8     
-                  00000158    00000226     main.obj (.text)
-                  0000037e    00000056     rts2800_fpu32.lib : boot28.obj (.text)
-                  000003d4    00000029                       : exit.obj (.text)
-                  000003fd    00000002                       : pre_init.obj (.text)
-                  000003ff    00000001                       : startup.obj (.text)
+.text.1    0    00000158    000002a3     
+                  00000158    00000221     main.obj (.text)
+                  00000379    00000056     rts2800_fpu32.lib : boot28.obj (.text)
+                  000003cf    00000029                       : exit.obj (.text)
+                  000003f8    00000002                       : pre_init.obj (.text)
+                  000003fa    00000001                       : startup.obj (.text)
 
 .text.2    0    00008000    0000022b     
                   00008000    0000019c     lib_cpu1.lib : interrupt.obj (.text)
@@ -112,9 +112,9 @@ MODULE SUMMARY
        Module          code   initialized data   uninitialized data
        ------          ----   ----------------   ------------------
     .\
-       main.obj        693    24                 40                
+       main.obj        688    24                 40                
     +--+---------------+------+------------------+--------------------+
-       Total:          693    24                 40                
+       Total:          688    24                 40                
                                                                    
     ../../../Library/lib_cpu1.lib
        sysctl.obj      788    0                  0                 
@@ -139,7 +139,7 @@ MODULE SUMMARY
                                                                    
        Stack:          0      0                  1024              
     +--+---------------+------+------------------+--------------------+
-       Grand Total:    3246   48                 1074              
+       Grand Total:    3241   48                 1074              
 
 
 GLOBAL DATA SYMBOLS: SORTED BY DATA PAGE
@@ -163,7 +163,7 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 page  address   name                                      
 ----  -------   ----                                      
 abs   ffffffff  .text                                     
-0     000003d4  C$$EXIT                                   
+0     000003cf  C$$EXIT                                   
 0     0000b54a  _Device_enableAllPeripherals              
 0     0000b694  _Device_enableUnbondedGPIOPullups         
 0     0000b671  _Device_enableUnbondedGPIOPullupsFor100Pin
@@ -187,9 +187,9 @@ abs   ffffffff  .text
 0     0000b6fe  _I2C_enableInterrupt                      
 0     0000b743  _I2C_getInterruptStatus                   
 0     0000b6b1  _I2C_initMaster                           
-0     0000035d  _I2C_receive                              
-0     0000034c  _I2C_send                                 
-0     00000256  _Init_I2C                                 
+0     00000358  _I2C_receive                              
+0     00000347  _I2C_send                                 
+0     0000025b  _Init_I2C                                 
 0     00008152  _Interrupt_disable                        
 0     0000811f  _Interrupt_enable                         
 0     000080ab  _Interrupt_initModule                     
@@ -203,7 +203,7 @@ abs   ffffffff  .text
 0     0000b262  _SysCtl_selectOscSource                   
 0     0000b173  _SysCtl_setAuxClock                       
 0     0000b0c7  _SysCtl_setClock                          
-0     000002af  _WriteData                                
+0     000002b4  _WriteData                                
 0     00100000  _XintffuncsLoadEnd                        
 0     00100000  _XintffuncsLoadStart                      
 0     00100000  _XintffuncsRunStart                       
@@ -228,14 +228,14 @@ abs   ffffffff  ___text__
 0     0000b7d2  __register_lock                           
 0     0000b7ce  __register_unlock                         
 1     00000400  __stack                                   
-0     000003ff  __system_post_cinit                       
-0     000003fd  __system_pre_init                         
+0     000003fa  __system_post_cinit                       
+0     000003f8  __system_pre_init                         
 1     00011030  __unlock                                  
-0     000003d4  _abort                                    
-0     0000037e  _c_int00                                  
+0     000003cf  _abort                                    
+0     00000379  _c_int00                                  
 0     0000b773  _copy_in                                  
 1     00011000  _currentMsgPtr                            
-0     000003d6  _exit                                     
+0     000003d1  _exit                                     
 1     00011015  _i2cMsgIn                                 
 1     00011002  _i2cMsgOut                                
 0     0000022b  _main                                     
@@ -254,17 +254,17 @@ page  address   name
 0     00000122  cinit                                     
 0     00000154  _SysCtl_delay                             
 0     0000022b  _main                                     
-0     00000256  _Init_I2C                                 
-0     000002af  _WriteData                                
+0     0000025b  _Init_I2C                                 
+0     000002b4  _WriteData                                
 0     000002f8  _ReadDate                                 
-0     0000034c  _I2C_send                                 
-0     0000035d  _I2C_receive                              
-0     0000037e  _c_int00                                  
-0     000003d4  C$$EXIT                                   
-0     000003d4  _abort                                    
-0     000003d6  _exit                                     
-0     000003fd  __system_pre_init                         
-0     000003ff  __system_post_cinit                       
+0     00000347  _I2C_send                                 
+0     00000358  _I2C_receive                              
+0     00000379  _c_int00                                  
+0     000003cf  C$$EXIT                                   
+0     000003cf  _abort                                    
+0     000003d1  _exit                                     
+0     000003f8  __system_pre_init                         
+0     000003fa  __system_post_cinit                       
 0     000080ab  _Interrupt_initModule                     
 0     000080ff  _Interrupt_initVectorTable                
 0     0000811f  _Interrupt_enable                         
